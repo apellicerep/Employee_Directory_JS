@@ -1,5 +1,6 @@
 const url = 'https://randomuser.me/api/?exc=login,gender,login,registered,id,nat&results=12'
 let peopleJson = {};
+let cardNames;
 
 
 async function getJSON() {
@@ -11,30 +12,39 @@ async function getJSON() {
 
 async function mainPage() {
     const employeeJSON = await getJSON()
+    const searchField =
+        `<form action="#" method="get">
+                        <input type="search" id="search-input" class="search-input" placeholder="Search...">
+                        <input type="submit" value="&#x1F50D;" id="serach-submit" class="search-submit">
+                        </form>`
+
     const ourHtmlProfiles = employeeJSON.results.map((person, index) => {
 
-        let fullName = `${person.name.first} ${person.name.last}`
+        let firstName = person.name.first
+        let lastName = person.name.last
         let email = person.email
         let location = person.location.state
         let image = person.picture.medium
+
         let html = `
                     <div class="card" myId="${index}">
                         <div class="card-img-container">
                             <img class="card-img" src="${image}" alt="profile picture">
                         </div>
                         <div class="card-info-container">
-                             <h3 id="name" class="card-name cap">${fullName}</h3>
+                             <h3 id="name" class="card-name cap">${firstName} ${lastName}</h3>
                              <p class="card-text">${email}</p>
                             <p class="card-text cap">${location}</p>
                         </div>
                     </div>`;
-        return html
+        return html;
 
     }).join('')
     document.querySelector('#gallery').innerHTML = ourHtmlProfiles;
+    document.querySelector('.search-container').innerHTML = ("beforebegin", searchField)
+    cardNames = document.querySelectorAll('.card-name')
 
 }
-
 
 
 
@@ -105,9 +115,7 @@ document.addEventListener('click', (e) => {
         document.querySelector('.gallery').nextElementSibling.remove()
     }
     else if (e.target.id === "modal-prev") {
-        console.log(e.target.parentNode.parentNode.getAttribute('myId'))
         let numCard = e.target.parentNode.parentNode.getAttribute('myId');
-
         if (numCard > 0) {
             document.querySelector('.gallery').nextElementSibling.remove()
             numCard--
@@ -116,15 +124,30 @@ document.addEventListener('click', (e) => {
 
     } else if (e.target.id === "modal-next") {
         let numCard = e.target.parentNode.parentNode.getAttribute('myId');
-
         if (numCard < peopleJson.results.length - 1) {
             document.querySelector('.gallery').nextElementSibling.remove()
             numCard++
             createModalCard(numCard)
         }
     }
+})
+
+
+document.querySelector('.search-container').addEventListener('keyup', (e) => {
+
+    for (let i of cardNames) {
+        i.parentNode.parentNode.style.display = "none"
+    }
+    for (let i of cardNames) {
+        if ((i.textContent.toLowerCase()).includes(e.target.value.toLowerCase())) {
+            console.log(i.textContent)
+            i.parentNode.parentNode.style.display = "";
+        }
+
+    }
 
 })
+
 
 
 
