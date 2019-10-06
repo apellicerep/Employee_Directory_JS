@@ -82,7 +82,6 @@ document.querySelector('#gallery').addEventListener('click', (e) => {
  */
 function createModalCard(numCard) {
     let person = peopleJson.results[numCard]
-    console.log(numCard)
     let firstName = person.name.first;
     let lastName = person.name.last;
     let email = person.email;
@@ -154,7 +153,6 @@ document.querySelector('.search-container').addEventListener('keyup', (e) => {
     }
     for (let i of cardNames) {
         if ((i.textContent.toLowerCase()).includes(e.target.value.toLowerCase())) {
-            console.log(i.textContent)
             i.parentNode.parentNode.style.display = "";
         }
 
