@@ -1,15 +1,22 @@
-const url = 'https://randomuser.me/api/?exc=login,gender,login,registered,id,nat&results=12'
+const url = 'https://randomuser.me/api/?exc=login,gender,login,registered,id,nat&results=12&nat=us,dk,fr,gb,es,au'
 let peopleJson = {};
 let cardNames;
 
 
+mainPage()
+
+/**
+ * Asynchronous function that fetch the random usesrs api and gets 12 employes in JSON format.
+ */
 async function getJSON() {
     const people12Data = await fetch(url)
     peopleJson = await people12Data.json()
     return peopleJson;
 }
 
-
+/**
+ * Aynchronous function that prints employee cards.
+ */
 async function mainPage() {
     const employeeJSON = await getJSON()
     const searchField =
@@ -47,7 +54,9 @@ async function mainPage() {
 }
 
 
-
+/**
+ * Click Eventlistener that targets the employee card and show its modal.
+ */
 document.querySelector('#gallery').addEventListener('click', (e) => {
 
     let divCard = e.target;
@@ -67,9 +76,10 @@ document.querySelector('#gallery').addEventListener('click', (e) => {
 })
 
 
-mainPage()
-
-
+/**
+ * Creates html employee modal
+ * @param {number} numCard - it's the id of every card.
+ */
 function createModalCard(numCard) {
     let person = peopleJson.results[numCard]
     console.log(numCard)
@@ -108,7 +118,9 @@ function createModalCard(numCard) {
 
 }
 
-
+/**
+ * EventListener on the Next,Prev and Close buttons in the modal.
+ */
 document.addEventListener('click', (e) => {
 
     if (e.target.id === "modal-close-btn" || ((e.target.tagName === "STRONG") && (e.target.textContent === "X"))) {
@@ -132,7 +144,9 @@ document.addEventListener('click', (e) => {
     }
 })
 
-
+/**
+ * Live search input
+ */
 document.querySelector('.search-container').addEventListener('keyup', (e) => {
 
     for (let i of cardNames) {
